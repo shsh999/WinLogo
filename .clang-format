@@ -1,0 +1,18 @@
+﻿---
+BasedOnStyle: Google
+AccessModifierOffset: '-4'
+AllowShortBlocksOnASingleLine: 'false'
+AllowShortCaseLabelsOnASingleLine: 'false'
+AllowShortFunctionsOnASingleLine: None
+AllowShortLoopsOnASingleLine: 'false'
+AlwaysBreakAfterReturnType: None
+ColumnLimit: '100'
+IndentWidth: '4'
+PenaltyBreakComment: '0'
+SortIncludes: 'false'
+SpaceAfterTemplateKeyword: 'false'
+Standard: Cpp11
+TabWidth: '4'
+UseTab: Never
+
+...
