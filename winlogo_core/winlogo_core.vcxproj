@@ -135,20 +135,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Algorithms.h" />
     <ClInclude Include="CaseInsensitiveString.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="IATHook.h" />
     <ClInclude Include="ImportDirectory.h" />
     <ClInclude Include="ImportedFunction.h" />
     <ClInclude Include="ImportedModule.h" />
     <ClInclude Include="ModuleHandle.h" />
     <ClInclude Include="PEFile.h" />
+    <ClInclude Include="MemoryProtectionGuard.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IATHook.cpp" />
     <ClCompile Include="ImportDirectory.cpp" />
     <ClCompile Include="ImportedFunction.cpp" />
     <ClCompile Include="ImportedModule.cpp" />
     <ClCompile Include="ModuleHandle.cpp" />
     <ClCompile Include="PEFile.cpp" />
+    <ClCompile Include="MemoryProtectionGuard.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

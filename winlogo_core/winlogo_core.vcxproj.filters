@@ -21,9 +21,22 @@
     </Filter>
     <Filter Include="utils\Header Files">
       <UniqueIdentifier>{5f0cfcc8-7af1-4e6c-bc02-e02ca2228e26}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="utils\Source Files">
       <UniqueIdentifier>{7029dbc6-0310-4bce-956c-2e96866ce06a}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="hooks">
+      <UniqueIdentifier>{ab8d45fc-4f16-4758-a58e-1c88885574b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\Header Files">
+      <UniqueIdentifier>{6338e83b-aad8-4720-ae75-b982ee840add}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="hooks\Source Files">
+      <UniqueIdentifier>{d22f0f89-03e8-4987-8ade-82e7fd27f942}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +61,15 @@
     <ClInclude Include="Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Algorithms.h">
+      <Filter>utils\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryProtectionGuard.h">
+      <Filter>utils\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IATHook.h">
+      <Filter>hooks\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PEFile.cpp">
@@ -64,6 +86,12 @@
     </ClCompile>
     <ClCompile Include="ModuleHandle.cpp">
       <Filter>utils\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryProtectionGuard.cpp">
+      <Filter>utils\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IATHook.cpp">
+      <Filter>hooks\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
