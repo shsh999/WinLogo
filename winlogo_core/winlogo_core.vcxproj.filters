@@ -70,6 +70,12 @@
     <ClInclude Include="IATHook.h">
       <Filter>hooks\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DelayLoadDirectory.h">
+      <Filter>pe_parser\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DelayLoadedModule.h">
+      <Filter>pe_parser\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PEFile.cpp">
@@ -92,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="IATHook.cpp">
       <Filter>hooks\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DelayLoadDirectory.cpp">
+      <Filter>pe_parser\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DelayLoadedModule.cpp">
+      <Filter>pe_parser\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

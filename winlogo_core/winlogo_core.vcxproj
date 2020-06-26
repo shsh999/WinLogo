@@ -79,6 +79,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)include\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,6 +94,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)include\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,6 +111,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)include\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +130,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)include\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,6 +142,8 @@
     <ClInclude Include="Algorithms.h" />
     <ClInclude Include="CaseInsensitiveString.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="DelayLoadDirectory.h" />
+    <ClInclude Include="DelayLoadedModule.h" />
     <ClInclude Include="IATHook.h" />
     <ClInclude Include="ImportDirectory.h" />
     <ClInclude Include="ImportedFunction.h" />
@@ -147,6 +153,8 @@
     <ClInclude Include="MemoryProtectionGuard.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DelayLoadDirectory.cpp" />
+    <ClCompile Include="DelayLoadedModule.cpp" />
     <ClCompile Include="IATHook.cpp" />
     <ClCompile Include="ImportDirectory.cpp" />
     <ClCompile Include="ImportedFunction.cpp" />
