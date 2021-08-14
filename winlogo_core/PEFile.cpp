@@ -23,6 +23,10 @@ PEFile::PEFile(const utils::ModuleHandle& moduleHandle) noexcept
     // Intentionally left blank.
 }
 
+PEFile PEFile::currentExecutable() noexcept {
+    return PEFile(GetModuleHandleW(nullptr));
+}
+
 void* PEFile::baseAddress() const noexcept {
     return m_baseAddress;
 }

@@ -144,6 +144,8 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="DelayLoadDirectory.h" />
     <ClInclude Include="DelayLoadedModule.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="HookedFunction.h" />
     <ClInclude Include="IATHook.h" />
     <ClInclude Include="ImportDirectory.h" />
     <ClInclude Include="ImportedFunction.h" />
@@ -151,10 +153,12 @@
     <ClInclude Include="ModuleHandle.h" />
     <ClInclude Include="PEFile.h" />
     <ClInclude Include="MemoryProtectionGuard.h" />
+    <ClInclude Include="WindowsError.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DelayLoadDirectory.cpp" />
     <ClCompile Include="DelayLoadedModule.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="IATHook.cpp" />
     <ClCompile Include="ImportDirectory.cpp" />
     <ClCompile Include="ImportedFunction.cpp" />

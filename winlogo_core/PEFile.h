@@ -17,6 +17,11 @@ public:
     explicit PEFile(const utils::ModuleHandle& moduleHandle) noexcept;
 
     /**
+     * Get the loaded PEFile of the current executable.
+     */
+    static PEFile currentExecutable() noexcept;
+
+    /**
      * Get the PE's base address.
      */
     void* baseAddress() const noexcept;

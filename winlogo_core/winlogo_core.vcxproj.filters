@@ -67,6 +67,9 @@
     <ClInclude Include="MemoryProtectionGuard.h">
       <Filter>utils\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HookedFunction.h">
+      <Filter>hooks\Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="IATHook.h">
       <Filter>hooks\Header Files</Filter>
     </ClInclude>
@@ -75,6 +78,12 @@
     </ClInclude>
     <ClInclude Include="DelayLoadedModule.h">
       <Filter>pe_parser\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>utils\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsError.h">
+      <Filter>utils\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="DelayLoadedModule.cpp">
       <Filter>pe_parser\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>utils\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
