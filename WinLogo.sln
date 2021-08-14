@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winlogo_core", "winlogo_core\winlogo_core.vcxproj", "{C87B668B-FB62-4284-8F2A-6A99575C9867}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winlogo", "winlogo\winlogo.vcxproj", "{09F4DF7D-3395-45CD-91C7-9394CFF70FE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{C87B668B-FB62-4284-8F2A-6A99575C9867}.Release|x64.Build.0 = Release|x64
 		{C87B668B-FB62-4284-8F2A-6A99575C9867}.Release|x86.ActiveCfg = Release|Win32
 		{C87B668B-FB62-4284-8F2A-6A99575C9867}.Release|x86.Build.0 = Release|Win32
+		{09F4DF7D-3395-45CD-91C7-9394CFF70FE0}.Debug|x64.ActiveCfg = Debug|x64
+		{09F4DF7D-3395-45CD-91C7-9394CFF70FE0}.Debug|x64.Build.0 = Debug|x64
+		{09F4DF7D-3395-45CD-91C7-9394CFF70FE0}.Debug|x86.ActiveCfg = Debug|Win32
+		{09F4DF7D-3395-45CD-91C7-9394CFF70FE0}.Debug|x86.Build.0 = Debug|Win32
+		{09F4DF7D-3395-45CD-91C7-9394CFF70FE0}.Release|x64.ActiveCfg = Release|x64
+		{09F4DF7D-3395-45CD-91C7-9394CFF70FE0}.Release|x64.Build.0 = Release|x64
+		{09F4DF7D-3395-45CD-91C7-9394CFF70FE0}.Release|x86.ActiveCfg = Release|Win32
+		{09F4DF7D-3395-45CD-91C7-9394CFF70FE0}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
