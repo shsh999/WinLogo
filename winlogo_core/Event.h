@@ -2,13 +2,34 @@
 
 #include "Common.h"
 #include "WindowsError.h"
+#include "Handle.h"
 
 namespace winlogo::utils {
+
+    namespace details {
+
+/**
+ * Windows Transaction handle traits.
+ */
+struct EventHandleTraits {
+    using HandleType = HANDLE;
+
+    static constexpr const HandleType INVALID_HANDLE = INVALID_HANDLE_VALUE;
+
+    static void close(HandleType handle) noexcept {
+        CloseHandle(handle);
+    }
+};
+
+using EventHandle = Handle<EventHandleTraits>;
+
+}  // namespace details
+
 
 /**
  * An exception thrown when CreateEvent fails (or the event already exists).
  */
-class CreateEventFailedError : public WindowsError {
+class EventAlreadyExistsError : public WindowsError {
 public:
     using WindowsError::WindowsError;
 };
@@ -31,10 +52,6 @@ public:
      * Throws an exception if the event already exists or if the event creation fails.
      */
     explicit Event(const std::wstring& name);
-    ~Event() noexcept;
-
-    NO_COPY(Event);
-    NO_MOVE(Event);
 
     /**
      * Wait indefinitely for the event to be signaled.
@@ -42,7 +59,7 @@ public:
     void wait();
 
 private:
-    HANDLE m_event;
+    details::EventHandle m_event;
 };
 
 }

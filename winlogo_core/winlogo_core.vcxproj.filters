@@ -85,6 +85,15 @@
     <ClInclude Include="WindowsError.h">
       <Filter>utils\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Handle.h">
+      <Filter>utils\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Registry.h">
+      <Filter>utils\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transaction.h">
+      <Filter>utils\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PEFile.cpp">
@@ -115,6 +124,9 @@
       <Filter>pe_parser\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Event.cpp">
+      <Filter>utils\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Registry.cpp">
       <Filter>utils\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

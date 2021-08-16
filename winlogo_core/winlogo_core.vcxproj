@@ -145,6 +145,7 @@
     <ClInclude Include="DelayLoadDirectory.h" />
     <ClInclude Include="DelayLoadedModule.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="Handle.h" />
     <ClInclude Include="HookedFunction.h" />
     <ClInclude Include="IATHook.h" />
     <ClInclude Include="ImportDirectory.h" />
@@ -153,6 +154,8 @@
     <ClInclude Include="ModuleHandle.h" />
     <ClInclude Include="PEFile.h" />
     <ClInclude Include="MemoryProtectionGuard.h" />
+    <ClInclude Include="Registry.h" />
+    <ClInclude Include="Transaction.h" />
     <ClInclude Include="WindowsError.h" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +169,7 @@
     <ClCompile Include="ModuleHandle.cpp" />
     <ClCompile Include="PEFile.cpp" />
     <ClCompile Include="MemoryProtectionGuard.cpp" />
+    <ClCompile Include="Registry.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
