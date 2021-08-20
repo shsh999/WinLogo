@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="LogoHooks.h" />
     <ClInclude Include="LogoUtils.h" />
+    <ClInclude Include="Registration.h" />
     <ClInclude Include="Resource.h" />
   </ItemGroup>
   <ItemGroup>

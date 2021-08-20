@@ -3,81 +3,82 @@
 #include "Registry.h"
 #include "Transaction.h"
 #include "Event.h"
+#include "Registration.h"
+
 #include <stdexcept>
 #include <ShlObj.h>
+#include <filesystem>
 
-static const auto LOGO_GUID = L"{55D087CC-5D80-46C7-BBE2-B73D98328FA5}";
-static const std::wstring ICON_OVERLAY_KEY =
-    LR"(SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   WinLogo\)" + std::wstring(LOGO_GUID);
-    /*static const GUID LOGO_GUID
-    = {0x55d087cc, 0x5d80, 0x46c7, {0xbb, 0xe2, 0xb7, 0x3d, 0x98, 0x32, 0x8f, 0xa5}};*/
-
+#define LOGO_GUID L"{55D087CC-5D80-46C7-BBE2-B73D98328FA5}"
 
 extern "C" IMAGE_DOS_HEADER __ImageBase;
 
-void refreshIconOverlays() {
+using winlogo::utils::Event;
+using winlogo::utils::RegistryKey;
+using winlogo::utils::RegistryOpenType;
+using winlogo::utils::Transaction;
+using winlogo::utils::WindowsError;
+
+namespace winlogo::registration {
+
+/**
+ * The registry operations required to create / destroy the WinLogo registration.
+ */
+// clang-format off
+static RegistrationEntry g_registrationTable[] = {
+    // General COM registration
+    {L"Software\\Classes\\CLSID\\" LOGO_GUID, EntryOperation::Delete, nullptr, L"WinLogo"},
+    {L"Software\\Classes\\CLSID\\" LOGO_GUID L"\\InProcServer32", EntryOperation::FileName, nullptr, nullptr},
+    {L"Software\\Classes\\CLSID\\" LOGO_GUID L"\\InProcServer32", EntryOperation::Default, L"ThreadingModel", L"Apartment"},
+    {L"Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved", EntryOperation::Delete, LOGO_GUID, L"WinLogo"},
+    {L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\   WinLogo", EntryOperation::Delete, nullptr, LOGO_GUID}
+};
+// clang-format on
+
+/**
+ * Try loading the registered WinLogo by triggering an IconOverlay reload.
+ */
+void tryLoadLogo() {
     SHLoadNonloadedIconOverlayIdentifiers();
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST | SHCNF_FLUSH, nullptr, nullptr);
 }
 
+/**
+ * Try to stop WinLogo by setting its event.
+ */
 void tryStopLogo() {
     try {
-        winlogo::utils::Event event(L"WinLogoEvent", false);
+        Event event(L"WinLogoEvent", false);
         event.set();
-    } catch (const winlogo::utils::WindowsError&) {
+    } catch (const WindowsError&) {
         // Intentionally left blank.
     }
 }
 
-enum class EntryOption {
-    None,
-    Delete,
-    FileName,
-};
+static void deleteTree(const Transaction& transaction, const wchar_t* entryPath) {
+    auto asPath = std::filesystem::path(entryPath);
+    std::wstring subkey = asPath.filename().wstring();
+    std::wstring keyPath = asPath.parent_path().wstring();
+    auto key = RegistryKey(HKEY_LOCAL_MACHINE, keyPath.c_str(), transaction, KEY_ENUMERATE_SUB_KEYS,
+                           RegistryOpenType::Open);
+    key.deleteTree(subkey);
+}
 
-struct Entry {
-    const wchar_t* Path;
-    EntryOption Option;
-
-    const wchar_t* Name;
-    const wchar_t* Value;
-};
-
-static Entry g_registrationTable[] = {
-    // General COM registration
-    {L"Software\\Classes\\CLSID\\{55D087CC-5D80-46C7-BBE2-B73D98328FA5}", EntryOption::Delete,
-     nullptr, L"WinLogo"},
-    {
-        L"Software\\Classes\\CLSID\\{55D087CC-5D80-46C7-BBE2-B73D98328FA5}\\InProcServer32",
-        EntryOption::FileName,
-    },
-    {L"Software\\Classes\\CLSID\\{55D087CC-5D80-46C7-BBE2-B73D98328FA5}\\InProcServer32",
-     EntryOption::None, L"ThreadingModel", L"Apartment"},
-
-    {L"Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved",
-     EntryOption::Delete, L"{55D087CC-5D80-46C7-BBE2-B73D98328FA5}", L"WinLogo"},
-    {L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\   WinLogo",
-     EntryOption::Delete, nullptr, L"{55D087CC-5D80-46C7-BBE2-B73D98328FA5}"}};
-
-
-static void unregisterServer(const winlogo::utils::Transaction& transaction) {
+static void unregisterServer(const Transaction& transaction) {
     for (const auto& entry : g_registrationTable) {
-        if (entry.Option != EntryOption::Delete) {
+        if (entry.operation != EntryOperation::Delete) {
             continue;
         }
 
         try {
-            auto key = 
-                winlogo::utils::RegistryKey(HKEY_LOCAL_MACHINE, entry.Path, transaction,
-                              DELETE | KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_SET_VALUE,
-                              winlogo::utils::RegistryOpenType::Open);
-
-            if (entry.Name == nullptr) {
-                key.deleteTree();
+            if (entry.name == nullptr) {
+                deleteTree(transaction, entry.keyPath);
             } else {
-                key.deleteValue(entry.Name);
+                auto key = RegistryKey(HKEY_LOCAL_MACHINE, entry.keyPath, transaction,
+                                       KEY_SET_VALUE, RegistryOpenType::Open);
+                key.deleteValue(entry.name);
             }
-        } catch (const winlogo::utils::WindowsError& error) {
+        } catch (const WindowsError& error) {
             if (error.code().value() == ERROR_FILE_NOT_FOUND) {
                 continue;
             }
@@ -89,10 +90,10 @@ static void unregisterServer(const winlogo::utils::Transaction& transaction) {
 std::wstring getCurrentModulePath() {
     std::wstring result(MAX_PATH, L'\0');
 
-    const auto length =
-        GetModuleFileNameW(reinterpret_cast<HMODULE>(&__ImageBase), result.data(), static_cast<DWORD>(result.size()));
+    const auto length = GetModuleFileNameW(reinterpret_cast<HMODULE>(&__ImageBase), result.data(),
+                                           static_cast<DWORD>(result.size()));
     if (length == 0 || length == result.size()) {
-        throw winlogo::utils::WindowsError();
+        throw WindowsError();
     }
 
     result.resize(length);
@@ -100,62 +101,75 @@ std::wstring getCurrentModulePath() {
     return result;
 }
 
-static bool registerServer(const winlogo::utils::Transaction& transaction) {
+static bool registerServer(const Transaction& transaction) {
     unregisterServer(transaction);
 
     auto filePath = getCurrentModulePath();
 
     for (const auto& entry : g_registrationTable) {
-        auto key = winlogo::utils::RegistryKey(HKEY_LOCAL_MACHINE, entry.Path, transaction, KEY_WRITE,
-                                    winlogo::utils::RegistryOpenType::Create);
-        OutputDebugStringW(entry.Path);
+        auto key = RegistryKey(HKEY_LOCAL_MACHINE, entry.keyPath, transaction, KEY_WRITE,
+                               RegistryOpenType::Create);
 
-        if (entry.Option != EntryOption::FileName && !entry.Value) {
+        if (entry.operation != EntryOperation::FileName && !entry.value) {
             continue;
         }
-        std::wstring value = entry.Value != nullptr ? entry.Value : filePath;
-        std::wstring name = entry.Name ? entry.Name : L"";
+
+        std::wstring value = entry.value != nullptr ? entry.value : filePath;
+        std::wstring name = entry.name != nullptr ? entry.name : L"";
         key.setStringValue(name, value);
     }
 
     return true;
 }
 
+}  // namespace winlogo::registration
+
+/**
+ * Register the DLL as an Icon Overlay and trigger Explorer to load it.
+ */
 extern "C" HRESULT __stdcall DllRegisterServer() {
     try {
-        OutputDebugStringA("Register!");
-        winlogo::utils::Transaction transaction;
-        registerServer(transaction);
+        Transaction transaction;
+        winlogo::registration::registerServer(transaction);
         transaction.commit();
-        refreshIconOverlays();
-    } catch (winlogo::utils::WindowsError& error) {
-        OutputDebugStringA("Error!");
+        winlogo::registration::tryLoadLogo();
+    } catch (WindowsError& error) {
         return HRESULT_FROM_WIN32(error.code().value());
     } catch (...) {
-        OutputDebugStringA("Real error!");
+        return S_FALSE;
     }
-    
+
     return S_OK;
 }
 
+/**
+ * Unregister the DLL as an Icon Overlay and trigger and stop the logo changes, if they are applied.
+ */
 extern "C" HRESULT __stdcall DllUnregisterServer() {
     try {
-        winlogo::utils::Transaction transaction;
-        unregisterServer(transaction);
+        Transaction transaction;
+        winlogo::registration::unregisterServer(transaction);
         transaction.commit();
-        tryStopLogo();
-    } catch (winlogo::utils::WindowsError& error) {
+        winlogo::registration::tryStopLogo();
+    } catch (WindowsError& error) {
         return HRESULT_FROM_WIN32(error.code().value());
+    } catch (...) {
+        return S_FALSE;
     }
 
     return S_OK;
 }
 
-extern "C" HRESULT __stdcall DllGetClassObject(_In_ REFCLSID, _In_ REFIID, _Outptr_ LPVOID FAR*)
-{
+/**
+ * The dll doesn't actually export any COM object.
+ */
+extern "C" HRESULT __stdcall DllGetClassObject(_In_ REFCLSID, _In_ REFIID, _Outptr_ LPVOID FAR*) {
     return CLASS_E_CLASSNOTAVAILABLE;
 }
 
+/**
+ * Lie to the process requesting the DLL and tell them they should not free the current dll.
+ */
 extern "C" HRESULT __stdcall DllCanUnloadNow() {
     return S_FALSE;
 }

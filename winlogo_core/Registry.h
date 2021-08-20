@@ -46,7 +46,7 @@ public:
     /**
      * Delete all sub-keys and values of the key.
      */
-    void deleteTree();
+    void deleteTree(const std::wstring& subkey);
 
     /**
      * Set a string value in the registry.

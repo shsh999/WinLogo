@@ -38,10 +38,10 @@ void hook() {
 DWORD __stdcall entry(void*) {
     if (shouldHookCurrentProcess()) {
         hook();
-    } else {
-        Sleep(5000);
+        FreeLibraryAndExitThread(reinterpret_cast<HMODULE>(&__ImageBase), 0);
     }
-    FreeLibraryAndExitThread(reinterpret_cast<HMODULE>(&__ImageBase), 0);
+
+    return 0;
 }
 
 }  // namespace winlogo

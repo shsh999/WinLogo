@@ -44,8 +44,8 @@ void RegistryKey::deleteValue(const std::wstring& value) {
     }
 }
 
-void RegistryKey::deleteTree() {
-    auto result = RegDeleteTreeW(m_handle.get(), nullptr);
+void RegistryKey::deleteTree(const std::wstring& subkey) {
+    auto result = RegDeleteTreeW(m_handle.get(), subkey.c_str());
     if (result != ERROR_SUCCESS) {
         throw WindowsError(result);
     }
@@ -53,7 +53,7 @@ void RegistryKey::deleteTree() {
 
 void RegistryKey::setStringValue(const std::wstring& name, const std::wstring& value) {
     const wchar_t* namePtr = name.empty() ? nullptr : name.c_str();
-    auto result = RegSetValueEx(m_handle.get(), namePtr, 0, REG_SZ,
+    auto result = RegSetValueExW(m_handle.get(), namePtr, 0, REG_SZ,
                                 reinterpret_cast<const BYTE*>(value.c_str()),
                                 static_cast<DWORD>(sizeof(wchar_t) * (value.size() + 1)));
     if (result != ERROR_SUCCESS) {
