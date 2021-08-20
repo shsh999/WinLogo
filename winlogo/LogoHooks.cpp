@@ -128,7 +128,7 @@ LogoHooks::LogoHooks()
 
 HooksGuard::HooksGuard() {
     if (s_hooks.has_value()) {
-        throw std::exception("Only one hooks instance should be initialized");
+        throw HooksAlreadyInstalledError();
     }
     initImages();
     s_hooks.emplace();
@@ -161,8 +161,11 @@ void HooksGuard::initImages() {
 
 
 HooksGuard::~HooksGuard() {
+    // Remove the hooks and tell explorer that it should refresh (and then redraw)
     s_hooks.reset();
     refreshLogo();
+    
+    // Make sure there is no thread running in the hooks context, and then destroy the images
     Sleep(1000);
     destroyImages();
 }

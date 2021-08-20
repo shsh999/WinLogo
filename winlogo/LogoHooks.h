@@ -8,6 +8,17 @@
 
 namespace winlogo {
 
+class HooksAlreadyInstalledError : public std::logic_error {
+public:
+    HooksAlreadyInstalledError() : std::logic_error("Hooks are already installed!") {
+        // Intentionally left blank.
+    }
+};
+
+class ImageLoadError : public std::runtime_error {
+
+};
+
 namespace details {
 class LogoHooks final {
 public:

@@ -24,6 +24,9 @@
     <ClCompile Include="LogoUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Registration.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogoHooks.h">
@@ -48,5 +51,10 @@
     <Image Include="enabled.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Exports.def">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

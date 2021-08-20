@@ -10,7 +10,7 @@ namespace winlogo {
 /**
  * Check if the dll is loaded into the correct process.
  */
-bool isCorrectProcess() noexcept {
+bool shouldHookCurrentProcess() noexcept {
     auto startButton = findStartButton();
     DWORD processId = 0;
     (void)GetWindowThreadProcessId(startButton, &processId);
@@ -36,8 +36,10 @@ void hook() {
  * The entry point for the hooker thread of the dll.
  */
 DWORD __stdcall entry(void*) {
-    if (isCorrectProcess()) {
+    if (shouldHookCurrentProcess()) {
         hook();
+    } else {
+        Sleep(5000);
     }
     FreeLibraryAndExitThread(reinterpret_cast<HMODULE>(&__ImageBase), 0);
 }
