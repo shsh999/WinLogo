@@ -1,8 +1,6 @@
 #include "LogoHooks.h"
 #include "LogoUtils.h"
-
 #include "Resource.h"
-
 #include "HookedFunction.h"
 
 #include <Uxtheme.h>
@@ -22,25 +20,13 @@ inline bool g_isLogoEnabled = true;
 
 static constexpr auto UXTHEME = "uxtheme.dll";
 
-static constexpr wchar_t LOGO_THEME_NAME[] = L"TaskbarPearl";
+static constexpr auto LOGO_THEME_NAME = L"TaskbarPearl";
 
 
 HBITMAP loadImage(int resource) {
-    // RECT rect{};
-    // GetClientRect(findStartButton(), &rect);
-    // int width = static_cast<int>(0.5 * (rect.right - rect.left));
-    // int height = static_cast<int>(0.5 * (rect.bottom - rect.top));
     return reinterpret_cast<HBITMAP>(LoadImageW(reinterpret_cast<HMODULE>(&__ImageBase),
                                                 MAKEINTRESOURCEW(resource), IMAGE_BITMAP, 0, 0,
                                                 LR_CREATEDIBSECTION));
-}
-
-void BetterOutputDebugString(const char* format, ...) {
-    char buffer[1024]{};
-    va_list args;
-    va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
-    OutputDebugStringA(buffer);
 }
 
 HTHEME newOpenThemeDataForDpi(decltype(OpenThemeDataForDpi) original, HWND hwnd,
