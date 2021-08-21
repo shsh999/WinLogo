@@ -7,50 +7,43 @@ using namespace std::string_literals;
 
 namespace winlogo::utils {
 
+ModuleHandle::ModuleHandle(const char* moduleName) : m_module(LoadLibraryA(moduleName), false) {
+    if (m_module.get() == nullptr) {
+        throw ModuleNotFoundError(moduleName);
+    }
+}
+
 ModuleHandle::ModuleHandle(std::string_view moduleName)
-    : m_module(LoadLibraryA(moduleName.data())) {
-    if (m_module == nullptr) {
-        throw ModuleNotFoundError(moduleName);
-    }
-}
-
-ModuleHandle::ModuleHandle(std::string_view moduleName, FailIfNotLoaded) {
-    if (!GetModuleHandleExA(0, moduleName.data(), &m_module)) {
-        throw ModuleNotFoundError(moduleName);
-    }
-}
-
-ModuleHandle::ModuleHandle(ModuleHandle&& other) noexcept
-    : m_module(std::exchange(other.m_module, nullptr)) {
+    : ModuleHandle(std::string(moduleName).c_str()) {
     // Intentionally left blank.
 }
 
-ModuleHandle& ModuleHandle::operator=(ModuleHandle&& other) noexcept {
-    ModuleHandle(std::move(other)).swap(*this);
-    return *this;
+ModuleHandle::ModuleHandle(const char* moduleName, FailIfNotLoaded)
+    : m_module(getLoadedModuleHandle(moduleName)) {
+    // Intentionally left blank.
 }
 
-ModuleHandle::~ModuleHandle() noexcept {
-    if (m_module != nullptr) {
-        FreeLibrary(m_module);
-    }
-}
-
-void ModuleHandle::swap(ModuleHandle& other) noexcept {
-    std::swap(m_module, other.m_module);
+ModuleHandle::ModuleHandle(std::string_view moduleName, FailIfNotLoaded)
+    : m_module(getLoadedModuleHandle(std::string(moduleName).c_str())) {
+    // Intentionally left blank.
 }
 
 void* ModuleHandle::baseAddress() const noexcept {
-    return m_module;
+    return m_module.get();
+}
+
+HMODULE ModuleHandle::getLoadedModuleHandle(const char* moduleName) {
+    HMODULE result = nullptr;
+    if (!GetModuleHandleExA(0, moduleName, &result)) {
+        throw ModuleNotFoundError(moduleName);
+    }
+
+    return result;
 }
 
 ModuleNotFoundError::ModuleNotFoundError(std::string_view moduleName)
-    : std::runtime_error("Module: "s + moduleName.data() + " was not found!") {
+    : WindowsError("Error loading module "s + moduleName.data()) {
     // Intentionally left blank.
-}
-
-void swap(ModuleHandle& first, ModuleHandle& second) noexcept {
-    first.swap(second);
 }
 
 }  // namespace winlogo::utils

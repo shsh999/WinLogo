@@ -19,8 +19,8 @@ class Handle {
 public:
     using HandleType = typename HandleTraits::HandleType;
 
-    explicit Handle(HandleType value) : m_handle(value) {
-        if (m_handle == HandleTraits::INVALID_HANDLE) {
+    explicit Handle(HandleType value, bool throwIfInvalid = true) : m_handle(value) {
+        if (throwIfInvalid && m_handle == HandleTraits::INVALID_HANDLE) {
             throw WindowsError();
         }
     }

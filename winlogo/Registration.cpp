@@ -9,6 +9,7 @@
 #include <ShlObj.h>
 #include <filesystem>
 
+// The GUID used in the registry for WinLogo. A macro is used for convenient string concatenation.
 #define LOGO_GUID L"{55D087CC-5D80-46C7-BBE2-B73D98328FA5}"
 
 extern "C" IMAGE_DOS_HEADER __ImageBase;

@@ -13,6 +13,11 @@ public:
         : std::system_error(lastError, std::system_category()) {
         // Intentionally left blank.
     }
+
+    WindowsError(const std::string& message, DWORD lastError = GetLastError())
+        : std::system_error(lastError, std::system_category(), message) {
+        // Intentionally left blank.
+    }
 };
 
 }  // namespace winlogo::utils

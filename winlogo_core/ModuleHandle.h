@@ -1,14 +1,32 @@
 #pragma once
 #include "Common.h"
+#include "Handle.h"
 
 #include <stdexcept>
 
 namespace winlogo::utils {
 
+namespace details {
+
+/**
+ * Windows Module handle traits.
+ */
+struct ModuleHandleTraits {
+    using HandleType = HMODULE;
+
+    static constexpr const HandleType INVALID_HANDLE = nullptr;
+
+    static void close(HandleType handle) noexcept {
+        FreeLibrary(handle);
+    }
+};
+
+}  // namespace details
+
 /**
  * An execption raised when failing to initialize a ModuleHandle.
  */
-class ModuleNotFoundError : public std::runtime_error {
+class ModuleNotFoundError : public WindowsError {
 public:
     explicit ModuleNotFoundError(std::string_view moduleName);
 };
@@ -32,22 +50,15 @@ public:
      * Initialize a module with the given name.
      * The module is loaded to memory, if necessary.
      */
+    explicit ModuleHandle(const char* moduleName);
     explicit ModuleHandle(std::string_view moduleName);
-
-    ModuleHandle(ModuleHandle&& other) noexcept;
-    ModuleHandle& operator=(ModuleHandle&& other) noexcept;
 
     /**
      * Initialize a module with the given name.
      * If the module is not loaded, an exception is thrown.
      */
+    ModuleHandle(const char* moduleName, FailIfNotLoaded);
     ModuleHandle(std::string_view moduleName, FailIfNotLoaded);
-
-    ~ModuleHandle() noexcept;
-
-    NO_COPY(ModuleHandle);
-
-    void swap(ModuleHandle& other) noexcept;
 
     /**
      * Get the module's base address.
@@ -56,9 +67,12 @@ public:
 
 private:
     /// The underlying Windows module handle.
-    HMODULE m_module;
-};
+    Handle<details::ModuleHandleTraits> m_module;
 
-void swap(ModuleHandle& first, ModuleHandle& second) noexcept;
+    /**
+     * Gets a new handle to an already loaded module.
+     */
+    static HMODULE getLoadedModuleHandle(const char* moduleName);
+};
 
 }  // namespace winlogo::utils

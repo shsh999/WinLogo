@@ -9,7 +9,7 @@ namespace winlogo::utils {
 namespace details {
 
 /**
- * Windows Transaction handle traits.
+ * Windows Event handle traits.
  */
 struct EventHandleTraits {
     using HandleType = HANDLE;
