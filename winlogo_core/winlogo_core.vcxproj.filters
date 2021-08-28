@@ -43,9 +43,6 @@
     <ClInclude Include="PEFile.h">
       <Filter>pe_parser\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleHandle.h">
-      <Filter>pe_parser\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ImportedModule.h">
       <Filter>pe_parser\Header Files</Filter>
     </ClInclude>
@@ -92,6 +89,9 @@
       <Filter>utils\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Transaction.h">
+      <Filter>utils\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleHandle.h">
       <Filter>utils\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

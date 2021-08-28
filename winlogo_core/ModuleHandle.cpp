@@ -32,6 +32,23 @@ void* ModuleHandle::baseAddress() const noexcept {
     return m_module.get();
 }
 
+std::wstring ModuleHandle::getPath() const {
+    return getModulePath(m_module.get());
+}
+
+std::wstring ModuleHandle::getModulePath(HMODULE moduleHandle) {
+    std::wstring result(MAX_PATH, L'\0');
+
+    const auto length =
+        GetModuleFileNameW(moduleHandle, result.data(), static_cast<DWORD>(result.size()));
+    if (length == 0 || (length == result.size() && GetLastError() == ERROR_INSUFFICIENT_BUFFER)) {
+        throw WindowsError("Error getting file name");
+    }
+
+    result.resize(length);
+    return result;
+}
+
 HMODULE ModuleHandle::getLoadedModuleHandle(const char* moduleName) {
     HMODULE result = nullptr;
     if (!GetModuleHandleExA(0, moduleName, &result)) {

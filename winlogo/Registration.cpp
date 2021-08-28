@@ -3,6 +3,7 @@
 #include "Registry.h"
 #include "Transaction.h"
 #include "Event.h"
+#include "ModuleHandle.h"
 #include "Registration.h"
 
 #include <stdexcept>
@@ -19,6 +20,7 @@ using winlogo::utils::RegistryKey;
 using winlogo::utils::RegistryOpenType;
 using winlogo::utils::Transaction;
 using winlogo::utils::WindowsError;
+using winlogo::utils::ModuleHandle;
 
 namespace winlogo::registration {
 
@@ -88,24 +90,10 @@ static void unregisterServer(const Transaction& transaction) {
     }
 }
 
-std::wstring getCurrentModulePath() {
-    std::wstring result(MAX_PATH, L'\0');
-
-    const auto length = GetModuleFileNameW(reinterpret_cast<HMODULE>(&__ImageBase), result.data(),
-                                           static_cast<DWORD>(result.size()));
-    if (length == 0 || length == result.size()) {
-        throw WindowsError();
-    }
-
-    result.resize(length);
-
-    return result;
-}
-
 static bool registerServer(const Transaction& transaction) {
     unregisterServer(transaction);
 
-    auto filePath = getCurrentModulePath();
+    auto filePath = ModuleHandle::getModulePath(reinterpret_cast<HMODULE>(&__ImageBase));
 
     for (const auto& entry : g_registrationTable) {
         auto key = RegistryKey(HKEY_LOCAL_MACHINE, entry.keyPath, transaction, KEY_WRITE,
@@ -169,8 +157,8 @@ extern "C" HRESULT __stdcall DllGetClassObject(_In_ REFCLSID, _In_ REFIID, _Outp
 }
 
 /**
- * Lie to the process requesting the DLL and tell them they should not free the current dll.
+ * We can always be removed, as we added 1 to our reference count when we were loaded.
  */
 extern "C" HRESULT __stdcall DllCanUnloadNow() {
-    return S_FALSE;
+    return S_OK;
 }

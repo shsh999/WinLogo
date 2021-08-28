@@ -65,6 +65,17 @@ public:
      */
     void* baseAddress() const noexcept;
 
+    /**
+     * Get the module's path on the disk.
+     */
+    std::wstring getPath() const;
+
+    /**
+     * Get the given module's path on the disk.
+     * If nullptr is passed, the path of the current process exe is returned.
+     */
+    static std::wstring getModulePath(HMODULE moduleHandle);
+
 private:
     /// The underlying Windows module handle.
     Handle<details::ModuleHandleTraits> m_module;
