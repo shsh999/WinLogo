@@ -119,6 +119,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\x64\$(Configuration)\winlogo.dll">
       <LogicalName>WinLogoDLL</LogicalName>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />

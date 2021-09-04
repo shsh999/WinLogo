@@ -11,8 +11,23 @@ HWND findStartButton() noexcept {
     return start;
 }
 
-void refreshLogo() noexcept {
-    (void)SendMessageW(findStartButton(), WM_THEMECHANGED, 0, 0);
+std::unordered_set<HWND> findAllStartButtons() {
+    std::unordered_set<HWND> result{findStartButton()};
+    HWND taskBar = FindWindowExW(nullptr, nullptr, L"Shell_SecondaryTrayWnd", nullptr);
+    while (taskBar != nullptr) {
+        HWND start = FindWindowExW(taskBar, nullptr, L"Start", nullptr);
+        if (start != nullptr) {
+            (void)result.insert(start);
+        }
+        taskBar = FindWindowExW(nullptr, taskBar, L"Shell_SecondaryTrayWnd", nullptr);
+    }
+    return result;
+}
+
+void refreshLogo() {
+    for (auto startWindow : findAllStartButtons()) {
+        (void)SendMessageW(startWindow, WM_THEMECHANGED, 0, 0);
+    }
 }
 
 }  // namespace winlogo
