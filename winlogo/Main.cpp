@@ -2,7 +2,6 @@
 #include "LogoUtils.h"
 
 #include "CaseInsensitiveString.h"
-#include "Event.h"
 #include "ModuleHandle.h"
 
 #include <filesystem>
@@ -21,17 +20,16 @@ bool shouldHookCurrentProcess() noexcept {
     return processId == GetCurrentProcessId();
 }
 
+static std::optional<HooksGuard> g_guards = std::nullopt;
+
 void hook() {
     try {
-        HooksGuard hooks;
-        utils::Event event(L"WinLogoEvent");
-        event.wait();
-        OutputDebugStringA("Stopping...");
+        g_guards.emplace();
     } catch (std::exception& err) {
-        OutputDebugStringA("Got std::exception!");
+        OutputDebugStringA("WinLogo: Got std::exception!");
         OutputDebugStringA(err.what());
     } catch (...) {
-        OutputDebugStringA("Got an unknown exception!");
+        OutputDebugStringA("WinLogo: Got an unknown exception!");
     }
 }
 
@@ -40,7 +38,7 @@ void hook() {
  */
 DWORD __stdcall entry(void*) {
     hook();
-    FreeLibraryAndExitThread(reinterpret_cast<HMODULE>(&__ImageBase), 0);
+    return 0;
 }
 
 utils::ci_wstring_view VALID_PROCESS_NAMES[] = {L"regsvr32.exe", L"explorer.exe"};
@@ -75,16 +73,9 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, [[maybe_unu
             return TRUE;
         }
 
-        // Increase the reference count so that we will not be removed by COM.
-        HMODULE currentModule = nullptr;
-        if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
-                                reinterpret_cast<LPCWSTR>(hInstance), &currentModule)) {
-            return FALSE;
-        }
+        // Hook in another thread...
         HANDLE thread = CreateThread(nullptr, 0, winlogo::entry, nullptr, 0, nullptr);
         if (thread == nullptr) {
-            // Remove the reference count. Should never happen...
-            FreeLibrary(currentModule);
             return FALSE;
         }
 

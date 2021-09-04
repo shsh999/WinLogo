@@ -76,9 +76,6 @@
     <ClInclude Include="DelayLoadedModule.h">
       <Filter>pe_parser\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Event.h">
-      <Filter>utils\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WindowsError.h">
       <Filter>utils\Header Files</Filter>
     </ClInclude>
@@ -122,9 +119,6 @@
     </ClCompile>
     <ClCompile Include="DelayLoadedModule.cpp">
       <Filter>pe_parser\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>utils\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Registry.cpp">
       <Filter>utils\Source Files</Filter>

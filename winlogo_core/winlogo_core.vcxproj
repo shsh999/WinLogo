@@ -144,7 +144,6 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="DelayLoadDirectory.h" />
     <ClInclude Include="DelayLoadedModule.h" />
-    <ClInclude Include="Event.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="HookedFunction.h" />
     <ClInclude Include="IATHook.h" />
@@ -161,7 +160,6 @@
   <ItemGroup>
     <ClCompile Include="DelayLoadDirectory.cpp" />
     <ClCompile Include="DelayLoadedModule.cpp" />
-    <ClCompile Include="Event.cpp" />
     <ClCompile Include="IATHook.cpp" />
     <ClCompile Include="ImportDirectory.cpp" />
     <ClCompile Include="ImportedFunction.cpp" />

@@ -2,7 +2,6 @@
 #include "WindowsError.h"
 #include "Registry.h"
 #include "Transaction.h"
-#include "Event.h"
 #include "ModuleHandle.h"
 #include "Registration.h"
 
@@ -15,7 +14,6 @@
 
 extern "C" IMAGE_DOS_HEADER __ImageBase;
 
-using winlogo::utils::Event;
 using winlogo::utils::RegistryKey;
 using winlogo::utils::RegistryOpenType;
 using winlogo::utils::Transaction;
@@ -44,18 +42,6 @@ static RegistrationEntry g_registrationTable[] = {
 void tryLoadLogo() {
     SHLoadNonloadedIconOverlayIdentifiers();
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST | SHCNF_FLUSH, nullptr, nullptr);
-}
-
-/**
- * Try to stop WinLogo by setting its event.
- */
-void tryStopLogo() {
-    try {
-        Event event(L"WinLogoEvent", false);
-        event.set();
-    } catch (const WindowsError&) {
-        // Intentionally left blank.
-    }
 }
 
 static void deleteTree(const Transaction& transaction, const wchar_t* entryPath) {
@@ -139,7 +125,6 @@ extern "C" HRESULT __stdcall DllUnregisterServer() {
         Transaction transaction;
         winlogo::registration::unregisterServer(transaction);
         transaction.commit();
-        winlogo::registration::tryStopLogo();
     } catch (WindowsError& error) {
         return HRESULT_FROM_WIN32(error.code().value());
     } catch (...) {
@@ -157,8 +142,8 @@ extern "C" HRESULT __stdcall DllGetClassObject(_In_ REFCLSID, _In_ REFIID, _Outp
 }
 
 /**
- * We can always be removed, as we added 1 to our reference count when we were loaded.
+ * We can never be removed safely as the hook is installed.
  */
 extern "C" HRESULT __stdcall DllCanUnloadNow() {
-    return S_OK;
+    return S_FALSE;
 }
