@@ -1,0 +1,17 @@
+﻿<Window x:Class="WinLogoUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WinLogoUI"
+        xmlns:ToggleSwitch="clr-namespace:ToggleSwitch;assembly=ToggleSwitch"
+        mc:Ignorable="d"
+        Title="WinLogo" Height="250" Width="400">
+    <StackPanel Margin="0,20,0,0">
+        <ToggleSwitch:HorizontalToggleSwitch Name="Switch" Margin="0,20" Checked="Switch_Checked" Unchecked="Switch_Unchecked" IsChecked="False"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Image x:Name="FirstImage" Margin="5" Width="100px" Height="100px" RenderTransformOrigin="-0.339,0.525"/>
+            <Image x:Name="SecondImage" Margin="5" Width="100px" Height="100px"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
