@@ -70,9 +70,6 @@
     <Reference Include="ToggleSwitch, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ToggleSwitch.1.2.0\lib\net46\ToggleSwitch.dll</HintPath>
     </Reference>
-    <Reference Include="Vestris.ResourceLib, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Vestris.ResourceLib.2.1.0\lib\net45\Vestris.ResourceLib.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

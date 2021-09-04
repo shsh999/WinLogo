@@ -48,10 +48,6 @@ namespace WinLogoUI
         {
             // Register embedded DLL resolving
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
-            foreach (var x in Assembly.GetExecutingAssembly().GetManifestResourceNames())
-            {
-                Debug.WriteLine(x);
-            }
             InitializeComponent();
             try
             {
