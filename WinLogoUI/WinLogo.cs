@@ -75,10 +75,7 @@ namespace WinLogoUI
             try
             {
                 byte[] winlogoData = GetWinLogoData();
-                using (var f = new FileStream(WINLOGO_PATH, FileMode.Create))
-                {
-                    f.Write(winlogoData, 0, winlogoData.Length);
-                }
+                File.WriteAllBytes(WINLOGO_PATH, winlogoData);
             }
             catch (Exception e)
             {

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Diagnostics;
 using System.Reflection;
 using System.Globalization;
+using Microsoft.Win32;
 
 namespace WinLogoUI
 {
@@ -82,6 +83,16 @@ namespace WinLogoUI
                 {
                     WinLogo.Uninstall();
                 }
+            }
+        }
+
+        private void ExportDll(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Dynamically Linked Libraries (*.dll)|*.dll";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                File.WriteAllBytes(saveFileDialog.FileName, WinLogo.GetWinLogoData());
             }
         }
     }
