@@ -2,7 +2,9 @@
 ## About
 This project is used to modify the start button logo of windows 10 computers.
 
-As for now, the logos are precompiled into the binary, and replacing them requires a recompilation (or changing the resources in a DLL manually). For more information, see [Logo Images](#Logo-Images).
+The logos are precompiled into the binary, but the UI supports loading the images from files and then exporting a new dll / installer using the new configuration.
+
+For more information, see [Logo Images](#Logo-Images).
 
 ![Installer UI](/docs/ui.png)
 ![Taskbar](/docs/taskbar.jpg)
@@ -51,6 +53,12 @@ Currently, there are several limitations regarding the images:
 * They must be BMP files
 * Transparency is achieved by using a black background
 * The size is used for the drawing - there is now stretching / resizing done by winlogo.
+
+
+## Replacing the Images
+The UI supports changing the images in the dll - just click on one of the images and select an image file from your computer without any of these limitations. The file will be converted and stretched to achieve the requirements.
+
+After changing the images, it is possible to export either the dll / a new installer using the `Export` menu.
 
 ## Credits
 ### GSL

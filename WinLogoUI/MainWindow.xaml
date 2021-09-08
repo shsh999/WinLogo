@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         Title="WinLogo" Height="275" Width="400">
     <StackPanel>
-        <Menu>
+        <Menu Background="Transparent">
             <MenuItem Header="_Export">
-                <MenuItem Header="_Dll Only" Click="ExportDll"/>
+                <MenuItem Header="_Dll" Click="ExportDll"/>
                 <MenuItem Header="_Installer" Click="ExportInstaller"/>
             </MenuItem>
         </Menu>
