@@ -6,17 +6,28 @@
         xmlns:local="clr-namespace:WinLogoUI"
         xmlns:ToggleSwitch="clr-namespace:ToggleSwitch;assembly=ToggleSwitch"
         mc:Ignorable="d"
-        Title="WinLogo" Height="250" Width="400">
+        Title="WinLogo" Height="275" Width="400">
     <StackPanel>
         <Menu>
             <MenuItem Header="_Export">
                 <MenuItem Header="_Dll Only" Click="ExportDll"/>
+                <MenuItem Header="_Installer" Click="ExportInstaller"/>
             </MenuItem>
         </Menu>
         <ToggleSwitch:HorizontalToggleSwitch Name="Switch" Margin="0,20" Checked="Switch_Checked" Unchecked="Switch_Unchecked" IsChecked="False"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image x:Name="FirstImage" Margin="5" Width="100px" Height="100px" RenderTransformOrigin="-0.339,0.525"/>
-            <Image x:Name="SecondImage" Margin="5" Width="100px" Height="100px"/>
+            <StackPanel Orientation="Vertical">
+                <Image x:Name="DisabledImage" Margin="5" Width="100px" Height="100px" Cursor="Hand" MouseLeftButtonUp="DisabledImageMouseUp"/>
+                <Button x:Name="RevertDisabled" Background="Transparent" Padding="0" Width="32px" BorderThickness="0" Visibility="Hidden" Click="RevertDisabled_Click">
+                    <Image Source="revert.png" Width="32px" />
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <Image x:Name="EnabledImage" Margin="5" Width="100px" Height="100px" Cursor="Hand" MouseLeftButtonUp="EnabledImageMouseUp"/>
+                <Button x:Name="RevertEnabled" Background="Transparent" Padding="0" Width="32px" BorderThickness="0" Visibility="Hidden" Click="RevertEnabled_Click">
+                    <Image Source="revert.png" Width="32px" />
+                </Button>
+            </StackPanel>
         </StackPanel>
     </StackPanel>
 </Window>

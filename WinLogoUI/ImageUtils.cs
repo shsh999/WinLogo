@@ -65,12 +65,40 @@ namespace WinLogoUI
             }
         }
 
-        public static Dictionary<string, BitmapImage> LoadImagesFromLogoDll(bool fromResource)
+        public static Bitmap ConvertTo24bpp(Image img)
+        {
+            var bmp = new Bitmap(img.Width, img.Height, PixelFormat.Format24bppRgb);
+            using (var graphics = Graphics.FromImage(bmp))
+            {
+                graphics.DrawImage(img, new Rectangle(0, 0, img.Width, img.Height));
+            }
+            return bmp;
+        }
+
+        private static Size GetStretchedSize(Image image)
+        {
+            return new Size(32, 32 * image.Height / image.Width);
+        }
+
+        public static Bitmap MakeResourceBitmapFromFile(string path, bool stretch)
+        {
+            var image = Image.FromFile(path);
+            var bitmap = stretch ? new Bitmap(image, GetStretchedSize(image)) : new Bitmap(image);
+            bitmap = ConvertTo24bpp(bitmap);
+            return bitmap;
+        }
+
+        public static BitmapImage LoadImageFromFile(string path, bool stretch)
+        {
+            return LoadImage(MakeResourceBitmapFromFile(path, stretch));
+        }
+
+        public static Dictionary<int, BitmapImage> LoadImagesFromLogoDll(bool fromResource)
         {
             string path = fromResource ? MakeTempWinlogoPath() : WinLogo.WINLOGO_PATH;
             byte[] winlogoData = WinLogo.GetWinLogoData();
             IntPtr dll = IntPtr.Zero;
-            var result = new Dictionary<string, BitmapImage>();
+            var result = new Dictionary<int, BitmapImage>();
             try
             {
                 if (fromResource)
@@ -85,8 +113,8 @@ namespace WinLogoUI
                 dll = LoadLibraryEx(path, IntPtr.Zero, LOAD_LIBRARY_AS_DATAFILE | DONT_RESOLVE_DLL_REFERENCES);
                 if (dll != IntPtr.Zero)
                 {
-                    result["enabled"] = LoadImage(GetBitmapResource(dll, 101));
-                    result["disabled"] = LoadImage(GetBitmapResource(dll, 102));
+                    result[WinLogo.DISABLED_RESOURCE] = LoadImage(GetBitmapResource(dll, WinLogo.DISABLED_RESOURCE));
+                    result[WinLogo.ENABLED_RESOURCE] = LoadImage(GetBitmapResource(dll, WinLogo.ENABLED_RESOURCE));
                 }
             }
             finally
